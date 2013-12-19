@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace PeakMagic
+{
+    public class IonSpectrum
+    {
+        public int lineIndex_begin;
+        public int lineIndex_end;
+
+        public string title { get; set; }
+        public string pepmass { get; set; }
+        public string pepmass_intensity { get; set; }
+
+        private string _charge;
+        public string charge
+        {
+            get
+            {
+                return _charge;
+            }
+            set
+            {
+                _charge = value;
+                if (charge.Contains("+") && Double.TryParse(charge.Replace("+", ""), out z))
+                    isPositiveIonMode = true;
+            }
+        }
+        public double z;
+
+        public double retentionTime; // In seconds
+        public int scans;
+        public List<Peak> peaks;
+
+        public bool isPositiveIonMode;
+
+        # region Basic methods
+        public IonSpectrum()
+        {
+            peaks = new List<Peak>();
+            lineIndex_begin = -1;
+            lineIndex_end = -1;
+            isPositiveIonMode = false;
+            z = 0;
+        }
+
+        public void AddPeak(double mz, double intensity)
+        {
+            peaks.Add(new Peak(mz, intensity, this));
+        }
+
+        public override string ToString()
+        {
+            return title + ", PepMass = " + pepmass + " (" + charge + "), " + peaks.Count + " peaks";
+        }
+
+        public double getMaxIntensity()
+        {
+            if (peaks == null || peaks.Count == 0)
+                return -1;
+            else
+            {
+                double max = -1;
+                foreach (Peak p in peaks)
+                {
+                    if (p.intensity > max)
+                        max = p.intensity;
+                }
+
+                return max;
+            }
+        }
+        #endregion
+
+        #region Peak searching methods
+
+        public List<Peak> findNeutralLossPeaks(double parentMZ, SearchParams searchParams)
+        {
+            if (z == 0 || !isPositiveIonMode)
+            {
+                Console.WriteLine("Error: Cannot perform neutral loss search if precursor ion charge is invalid");
+                return null;
+            }
+
+            List<Peak> NLPeaks = new List<Peak>();
+            double currentMaxIntensity = getMaxIntensity();
+            int NLMassesFound = 0;
+
+            for (int NLMassIndex = 0; NLMassIndex < searchParams.neutralLossMass_num.Count; NLMassIndex++)
+            {
+                bool currentNLMassFound = false;
+                double currentNLMass = searchParams.neutralLossMass_num[NLMassIndex];
+                for (int i = 0; i < searchParams.maxNumberOfLosses_num; i++)
+                {
+                    double searchMass = parentMZ - (Convert.ToDouble(i + 1) * currentNLMass) / z;
+                    double searchMass_min = searchMass - (searchParams.errorTolerance_num);
+                    double searchMass_max = searchMass + (searchParams.errorTolerance_num);
+
+                    List<Peak> matchingPeaks = peaks.FindAll(anyPeak => anyPeak.mz <= searchMass_max && anyPeak.mz >= searchMass_min &&
+                        (anyPeak.intensity / currentMaxIntensity) * 100 >= searchParams.intensityCutoff_num);
+
+                    if (matchingPeaks != null)
+                    {
+                        if (matchingPeaks.Count > 0 && currentNLMassFound == false)
+                        {
+                            currentNLMassFound = true;
+                            NLMassesFound++;
+                        }
+                        foreach (Peak p in matchingPeaks)
+                            p.consecutiveNeutralLossIndex = i + 1;
+                        NLPeaks.AddRange(matchingPeaks);
+                    }
+                }
+            }
+
+            if (searchParams.allNLsRequiredPerSpectrum)
+            {
+                if (NLMassesFound == searchParams.neutralLossMass_num.Count)
+                    return NLPeaks;
+                else
+                    return new List<Peak>();
+            }
+            else
+                return NLPeaks;
+        }
+
+        #endregion
+    }
+}

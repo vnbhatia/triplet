@@ -1,0 +1,284 @@
+﻿<Window x:Class="Triplet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Triplet"
+        Title="TRIPLET" Height="475" Width="560" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <Style x:Key="FlatTokenizingControl" TargetType="{x:Type local:TokenizingControl}">
+            <Style.Resources>
+                <Style x:Key="{x:Type FlowDocument}"
+         TargetType="{x:Type FlowDocument}">
+                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                    <Setter Property="FontSize" Value="12"/>
+                </Style>
+            </Style.Resources>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Border 
+                              Name="Border"
+                              CornerRadius="2" 
+                              Padding="2"
+                              Background="White"
+                              BorderBrush="#FFDDDDDD"
+                              BorderThickness="1">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="MinWidth" Value="60"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="TextElement.Foreground" Value="Black"/>
+            <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="BorderBrush" Value="#FFDDDDDD"/>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBoxBase}">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                        <Border 
+                              Name="Border"
+                              CornerRadius="2" 
+                              Padding="2"
+                              Background="White"
+                              BorderBrush="#FFDDDDDD"
+                              BorderThickness="1" >
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MetroButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+            <Setter Property="Background" Value="#EEEEEEEE"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="BorderThickness" Value="0.5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Border
+                                x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" />
+
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                RecognizesAccessKey="True" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="OpacityMask" Value="#AA888888"/>
+                                <Setter Property="Margin" Value="2 1" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <!--<Setter Property="Background" Value="DimGray"/>-->
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="NameTokenTemplate">
+            <DataTemplate.Resources>
+                <Storyboard x:Key="OnLoaded1">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </DataTemplate.Resources>
+            <Border x:Name="border" CornerRadius="5" Height="Auto" Padding="5,3" Margin="3,0,3,3">
+                <Border.Background>
+                    <SolidColorBrush Color="#FFDDDDDD"/>
+                </Border.Background>
+                <Grid HorizontalAlignment="Left" Width="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="NoWrap" Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Margin="0,0,0,0"/>
+                </Grid>
+            </Border>
+            <DataTemplate.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource OnLoaded1}"/>
+                </EventTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+    <StackPanel>
+        <TabControl Name="mainTabControl">
+            <TabItem Header="S_etup" Name="setupTab">
+                <StackPanel>
+                    <StackPanel DataContext="{Binding searchParams}">
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">MGF File</Label>
+                            <TextBox Margin="10,0,0,0" Width="290" Text="{Binding mgfFilePath}" />
+                            <Button Margin="5,0,0,0" Padding="5,0,5,0" Name="browseButton" Click="browseButton_Click" Style="{DynamicResource ResourceKey=MetroButton}">...</Button>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">De novo Neutral Loss Search</Label>
+                            <CheckBox Margin="10,0,0,0" VerticalAlignment="Center" IsEnabled="False" IsChecked="{Binding isDeNovoSearch}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">Neutral Loss Masses (Da)</Label>
+                            <TextBox Visibility="Collapsed" Margin="10,0,0,0" Width="65" Text="{Binding Path=neutralLossMass}" IsEnabled="{Binding isNotDeNovoSearch}" />
+                            <ComboBox Name="SearchModeComboBox" Width="120" Margin="10,0,0,0" SelectedValuePath="Content" SelectedValue="{Binding searchMode}">
+                                <ComboBoxItem Content="Match any of:"/>
+                                <ComboBoxItem Content="Match all of:" />
+                            </ComboBox>
+                            <local:TokenizingControl Style="{DynamicResource ResourceKey=FlatTokenizingControl}" IsEnabled="{Binding isNotDeNovoSearch}" x:Name="neutralLossMassesTokenizerControl" Margin="10,0,0,0" Width="185" MaxHeight="30" TokenTemplate="{DynamicResource NameTokenTemplate}" VerticalScrollBarVisibility="Auto">
+                                <FlowDocument>
+                                    <Paragraph>
+                                        <Run Text="98"/>
+                                    </Paragraph>
+                                </FlowDocument>
+                            </local:TokenizingControl>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">Error Tolerance (m/z)</Label>
+                            <TextBox Margin="10,0,0,0" Width="65" Text="{Binding errorTolerance}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">
+                                <TextBlock FontSize="11" Text="1&#186;, 2&#186; Intensity Cutoff (% of max peak)"/>
+                            </Label>
+                            <TextBox Margin="10,0,0,0" Width="65" Text="{Binding intensityCutoff}"/>
+                            <TextBox Margin="10,0,0,0" Width="65" Text="{Binding intensityCutoff2}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">Retention Time Window (sec)</Label>
+                            <TextBox Margin="10,0,0,0" Width="65" Text="{Binding RTWindow}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                            <Label Width="200" HorizontalContentAlignment="Right">Maximum number of losses</Label>
+                            <TextBox Margin="10,0,0,0" Width="65" Text="{Binding maxNumberOfLosses}" IsEnabled="{Binding isNotDeNovoSearch}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <DockPanel Margin="20">
+                        <Button Height="80" Name="searchButton" Click="searchButton_Click" Style="{DynamicResource ResourceKey=MetroButton}">
+                            <StackPanel>
+                                <Label Margin="0 -5" VerticalContentAlignment="Top" HorizontalAlignment="Center">_Search</Label>
+                                <Image Margin="0 -10" Source="/Triplet;component/search%20-%20transparent%202.png" Stretch="Fill" Width="170" Opacity="1"></Image>
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Name="resultsTabItem">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>_Results</Label>
+                        <Button Name="copyButton" Margin="2" ToolTip="Copy" Click="copyButton_Click" >
+                            <Image Source="/Triplet;component/Images/Visualpharm-Icons8-Metro-Style-Editing-Copy.ico" Stretch="Fill" Width="13"></Image>
+                        </Button>
+                    </StackPanel>
+                </TabItem.Header>
+                <ListView Name="NeutralLossPeaksListView" Height="367" SelectionMode="Extended">
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <EventSetter Event="MouseDoubleClick" Handler="NLPeaksListView_DoubleClick" />
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Pepmass (m/z)" DisplayMemberBinding="{Binding pepmass}" />
+                            <GridViewColumn Header="NL Mass (Da)" DisplayMemberBinding="{Binding neutralLossMass}" />
+                            <GridViewColumn Header="RT Start (min)" DisplayMemberBinding="{Binding Path=RTWindow_start, StringFormat={}{0:F2}}"/>
+                            <GridViewColumn Header="RT End (min)" DisplayMemberBinding="{Binding Path=RTWindow_end, StringFormat={}{0:F2}}"/>
+                            <GridViewColumn Header="NL Peak (m/z)" DisplayMemberBinding="{Binding p.mz}"/>
+                            <GridViewColumn Header="Spectrum Title" DisplayMemberBinding="{Binding spectrumTitle}"/>
+                            <GridViewColumn Header="Precursor Charge" DisplayMemberBinding="{Binding spectrumCharge}" />
+                            <GridViewColumn Header="Consecutive NL Index" DisplayMemberBinding="{Binding consecutiveNeutralLossIndex}"/>
+                            <GridViewColumn Header="Intensity" DisplayMemberBinding="{Binding Path=p.intensity, StringFormat={}{0:F2}}"/>
+                            <GridViewColumn Header="% Max Intensity" DisplayMemberBinding="{Binding percentOfMaxIntensity}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl>
+        <StatusBar>
+            <StackPanel Orientation="Horizontal">
+                <Label Name="statusBarMessageLabel" Width="515">Ready</Label>
+                <Canvas Name="statusIndicator" VerticalAlignment="Center" Height="20" Width="20" Visibility="Hidden">
+                    <Ellipse Height="20" Width="20" Fill="Orange">
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="Ellipse.Loaded">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.1" To="1.0" Duration="0:0:1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                </Canvas>
+            </StackPanel>
+        </StatusBar>
+    </StackPanel>
+</Window>

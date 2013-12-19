@@ -1,0 +1,38 @@
+﻿<Window x:Class="Triplet.SpectrumViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        Title="SpectrumViewer" Height="410" Width="818">
+    <Grid>
+        <chartingToolkit:Chart HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <chartingToolkit:Chart.Title>
+                <Label Content="{Binding chartTitle}"/>
+            </chartingToolkit:Chart.Title>
+            <chartingToolkit:Chart.Axes>
+                <chartingToolkit:LinearAxis Orientation="X" Title="m/z"></chartingToolkit:LinearAxis>
+                <chartingToolkit:LinearAxis Orientation="Y" Title="Intensity"></chartingToolkit:LinearAxis>
+            </chartingToolkit:Chart.Axes>
+            <chartingToolkit:Chart.LegendStyle>
+                <Style TargetType="{x:Type Control}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                </Style>
+            </chartingToolkit:Chart.LegendStyle>
+            <chartingToolkit:LineSeries Title="Spectrum" ItemsSource="{Binding data}" IndependentValueBinding="{Binding Key}" DependentValueBinding="{Binding Value}">
+                <chartingToolkit:LineSeries.DataPointStyle>
+                    <Style TargetType="chartingToolkit:LineDataPoint">
+                        <Setter Property="Opacity" Value="0" />
+                    </Style>
+                </chartingToolkit:LineSeries.DataPointStyle>
+            </chartingToolkit:LineSeries>
+            <chartingToolkit:ScatterSeries Title="Neutral Loss Peaks" ItemsSource="{Binding highlightedPeaks}" IndependentValueBinding="{Binding Key}" DependentValueBinding="{Binding Value}">
+                <chartingToolkit:ScatterSeries.DataPointStyle>
+                    <Style TargetType="chartingToolkit:ScatterDataPoint">
+                        <Setter Property="Opacity" Value="1" />
+                        <Setter Property="Background" Value="Red" />
+                    </Style>
+                </chartingToolkit:ScatterSeries.DataPointStyle>
+            </chartingToolkit:ScatterSeries>
+        </chartingToolkit:Chart>
+    </Grid>
+</Window>
